@@ -124,7 +124,8 @@ function ehGroups(problems) {
 const ehIcon = (name) => `<ha-icon icon="mdi:${name}" aria-hidden="true"></ha-icon>`;
 function ehRowHTML(p, cfg, asButton = false, index = 0) {
   const warn = p.status === 'unavailable';
-  const open = asButton ? `<button type="button" class="eh-row" data-open="1" data-focus="row:${index}">` : '<div class="eh-row">';
+  const idAttr = ` data-id="${ehEsc(p.id)}"`;
+  const open = asButton ? `<button type="button" class="eh-row"${idAttr} data-open="1" data-focus="row:${index}">` : `<div class="eh-row"${idAttr}>`;
   const close = asButton ? '</button>' : '</div>';
   const since = ehSince(p.since);
   return `${open}<span class="eh-ico ${warn ? '' : 'eh-neutral'}">${ehIcon(EH_ICON[p.status])}</span>` +
@@ -147,8 +148,8 @@ ha-icon{display:inline-flex;align-items:center;justify-content:center;flex-shrin
 .eh-status.eh-ok{background:color-mix(in srgb,var(--eh-accent) 14%,transparent);color:var(--eh-btn-fg);box-shadow:none}
 .eh-status.eh-neutral{background:var(--eh-circle);color:var(--eh-muted);box-shadow:inset 0 0 0 1px var(--eh-border)}
 .eh-summary{display:grid;grid-template-columns:repeat(var(--eh-tiles,3),minmax(0,1fr));gap:8px;margin-top:14px}
-.eh-tile{background:var(--eh-surface);border-radius:16px;padding:10px 12px;min-width:0}
-.eh-tile .n{font-size:22px;font-weight:700;line-height:1.1}.eh-tile .l{font-size:11.5px;color:var(--eh-muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eh-tile{background:var(--eh-surface);border-radius:16px;padding:16px 16px 15px;min-width:0}
+.eh-tile .n{font-size:30px;font-weight:700;line-height:1.1}.eh-tile .l{font-size:13px;color:var(--eh-muted);margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .eh-tile.eh-warn .n{color:var(--eh-warn-fg)}.eh-tile.eh-good .n{color:var(--eh-btn-fg)}
 .eh-list{display:grid;gap:8px;margin-top:14px}
 .eh-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--eh-surface);border:0;border-radius:16px;padding:10px 12px;min-width:0;width:100%;text-align:left}
@@ -167,10 +168,11 @@ button.eh-row:hover{box-shadow:inset 0 0 0 1px var(--eh-accent)}
 .eh-details{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;padding:10px 14px;border-radius:999px;font-weight:600;font-size:13.5px;border:1px solid color-mix(in srgb,var(--eh-accent) 45%,transparent);background:color-mix(in srgb,var(--eh-accent) 12%,transparent);color:var(--eh-btn-fg)}
 .eh-details:hover{background:color-mix(in srgb,var(--eh-accent) 22%,transparent)}.eh-details ha-icon{--mdc-icon-size:18px;width:18px;height:18px}
 .eh-details:focus-visible,.eh-row:focus-visible,.eh-x:focus-visible,.eh-chip:focus-visible{outline:2px solid var(--eh-accent);outline-offset:2px}
-.eh-overlay{position:fixed;inset:0;z-index:9999;background:#0009;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.eh-overlay{position:fixed;inset:0;overscroll-behavior:contain;z-index:9999;background:#0009;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 .eh-modal{width:min(390px,100%);max-height:min(88vh,680px);display:flex;flex-direction:column;background:var(--eh-bg);color:var(--eh-fg);border:1px solid var(--eh-border);border-radius:26px;overflow:hidden;box-shadow:0 18px 60px #0005}
-.eh-mhead{flex:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 16px 12px 18px;background:var(--eh-bg);border-bottom:1px solid var(--eh-border)}
-.eh-mhead .eh-title{font-size:20px;margin-top:5px}
+.eh-mhead{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 16px 12px 18px;background:var(--eh-bg);border-bottom:1px solid var(--eh-border)}
+.eh-mtitle{flex:1;min-width:0;margin:0;font-size:17px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.eh-row.eh-hl{box-shadow:inset 0 0 0 2px var(--eh-accent)}
 .eh-modal .eh-row{grid-template-columns:36px minmax(0,1fr)}.eh-modal .eh-st{grid-column:2;text-align:left;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.eh-modal .eh-since{display:inline;margin-top:0}
 .eh-x{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--eh-border);background:var(--eh-surface);color:var(--eh-fg);display:grid;place-items:center;padding:0}
 .eh-mbody{overflow-y:auto;overscroll-behavior:contain;padding:12px 18px 18px;min-width:0}
@@ -183,9 +185,9 @@ button.eh-row:hover{box-shadow:inset 0 0 0 1px var(--eh-accent)}
   .eh-root{padding:13px;border-radius:23px}.eh-title{font-size:23px}.eh-summary{--eh-tiles:3;gap:6px}
   .eh-summary.eh-four{grid-template-columns:repeat(2,minmax(0,1fr))}
   .eh-row{grid-template-columns:36px minmax(0,1fr)}.eh-st{grid-column:2;text-align:left;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.eh-since{display:inline;margin-top:0}
-  .eh-tile{padding:8px 10px}.eh-tile .n{font-size:19px}
+  .eh-tile{padding:13px 12px 12px}.eh-tile .n{font-size:26px}.eh-tile .l{font-size:12px}
 }
-@container eh-card (max-width:340px){.eh-tile .l{font-size:10.5px;white-space:normal;overflow:visible;line-height:1.25}.eh-status{display:none}}
+@container eh-card (max-width:340px){.eh-tile .l{font-size:11px;white-space:normal;overflow:visible;line-height:1.25}.eh-status{display:none}}
 @container eh-card (max-width:280px){.eh-summary{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:no-preference){.eh-details{transition:background .15s}}
 `;
@@ -196,7 +198,7 @@ class EntityHealthCard extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this._config = ehConfig(); this._hass = null;
-    this._open = false; this._filter = 'all'; this._last = ''; this._openerKey = ''; this._pendingFocus = '';
+    this._open = false; this._filter = 'all'; this._last = ''; this._openerKey = ''; this._pendingFocus = ''; this._target = ''; this._scrollTo = false;
     this.shadowRoot.addEventListener('click', event => this._click(event));
     this._onKey = event => this._key(event);
     this._onAppearance = () => this._paint();
@@ -210,7 +212,7 @@ class EntityHealthCard extends HTMLElement {
     this._media?.removeEventListener?.('change', this._onAppearance);
     document.removeEventListener('keydown', this._onKey);
   }
-  setConfig(raw) { this._config = ehConfig(raw); this._open = false; this._filter = 'all'; this._last = ''; this._paint(); }
+  setConfig(raw) { this._config = ehConfig(raw); this._open = false; this._filter = 'all'; this._target = ''; this._scrollTo = false; this._last = ''; this._paint(); }
   set hass(hass) { this._hass = hass; this._paint(); }
   getCardSize() { return 4 + Math.min(this._config.max_rows, 4); }
   _isDark() {
@@ -233,8 +235,30 @@ class EntityHealthCard extends HTMLElement {
     this._pendingFocus = '';
     this.shadowRoot.innerHTML = `<style>${EH_STYLE}</style><div class="eh-theme ${dark ? 'eh-dark' : 'eh-light'}">${this._card(data)}${this._open && data ? this._popup(data) : ''}</div>`;
     const body = this.shadowRoot.querySelector('.eh-mbody');
-    if (body) body.scrollTop = scroll;
+    const target = this._open && this._target ? [...this.shadowRoot.querySelectorAll('.eh-modal .eh-row[data-id]')].find(e => e.dataset.id === this._target) : null;
+    if (target) target.classList.add('eh-hl');
+    if (body) {
+      if (this._scrollTo && target) {
+        // Open the popup positioned on the entity the user clicked, not at the top of the list.
+        const r = target.getBoundingClientRect(), b = body.getBoundingClientRect();
+        body.scrollTop += (r.top - b.top) - (b.height / 2 - r.height / 2);
+      } else body.scrollTop = scroll;
+    }
+    this._scrollTo = false;
+    this._lockScroll();
     if (want) this.shadowRoot.querySelector(`[data-focus="${want}"]`)?.focus({ preventScroll: true });
+  }
+  // While the popup is open the dashboard behind must not move: block wheel/touch scrolling
+  // outside the list and stop scroll chaining at the list edges.
+  _lockScroll() {
+    const overlay = this.shadowRoot.querySelector('.eh-overlay');
+    if (!overlay) return;
+    const body = overlay.querySelector('.eh-mbody');
+    const atEdge = (dy) => !body || (dy < 0 && body.scrollTop <= 0) || (dy > 0 && body.scrollTop + body.clientHeight >= body.scrollHeight - 1);
+    overlay.addEventListener('wheel', (e) => { if (!body || !body.contains(e.target) || atEdge(e.deltaY)) e.preventDefault(); }, { passive: false });
+    let y = 0;
+    overlay.addEventListener('touchstart', (e) => { y = e.touches[0] ? e.touches[0].clientY : 0; }, { passive: true });
+    overlay.addEventListener('touchmove', (e) => { const dy = y - (e.touches[0] ? e.touches[0].clientY : y); if (!body || !body.contains(e.target) || atEdge(dy)) e.preventDefault(); }, { passive: false });
   }
   _card(data) {
     const c = this._config;
@@ -285,26 +309,28 @@ class EntityHealthCard extends HTMLElement {
     } else {
       list = `<div class="eh-list" style="margin-top:0">${items.map(p => ehRowHTML(p, c)).join('')}</div>`;
     }
-    return `<div class="eh-overlay" data-backdrop="1"><div class="eh-modal" role="dialog" aria-modal="true" aria-labelledby="eh-mt"><div class="eh-mhead"><div><div class="eh-eyebrow">Elenco entità</div><h2 class="eh-title" id="eh-mt">Da verificare<b>.</b></h2></div><button class="eh-x" type="button" data-close="1" data-focus="close" aria-label="Chiudi">${ehIcon('close')}</button></div><div class="eh-mbody"><div class="eh-chips">${chips}</div>${list}<p class="eh-note">«Non disponibile» significa che Home Assistant non riesce a leggere il valore dell’entità: non implica che il dispositivo sia spento. «Sconosciuto» indica che l’entità esiste ma non ha ancora un valore.${counts.missing ? ' «Non trovata» indica un’entità selezionata che non esiste più in Home Assistant.' : ''}</p></div></div></div>`;
+    return `<div class="eh-overlay" data-backdrop="1"><div class="eh-modal" role="dialog" aria-modal="true" aria-labelledby="eh-mt"><div class="eh-mhead"><h2 class="eh-mtitle" id="eh-mt">Elenco entità</h2><button class="eh-x" type="button" data-close="1" data-focus="close" aria-label="Chiudi">${ehIcon('close')}</button></div><div class="eh-mbody"><div class="eh-chips">${chips}</div>${list}<p class="eh-note">«Non disponibile» significa che Home Assistant non riesce a leggere il valore dell’entità: non implica che il dispositivo sia spento. «Sconosciuto» indica che l’entità esiste ma non ha ancora un valore.${counts.missing ? ' «Non trovata» indica un’entità selezionata che non esiste più in Home Assistant.' : ''}</p></div></div></div>`;
   }
-  _openPopup(key) {
+  _openPopup(key, id) {
     this._openerKey = key || 'details'; this._open = true; this._filter = 'all'; this._pendingFocus = 'close'; this._last = '';
+    this._target = ehEntityId(id); this._scrollTo = !!this._target;
     document.addEventListener('keydown', this._onKey); this._paint();
   }
   _closePopup() {
     if (!this._open) return;
-    this._open = false; this._pendingFocus = this._openerKey || 'details'; this._last = '';
+    this._open = false; this._target = ''; this._scrollTo = false; this._pendingFocus = this._openerKey || 'details'; this._last = '';
     document.removeEventListener('keydown', this._onKey); this._paint();
   }
   _key(event) {
     if (!this._open) return;
     if (event.key === 'Escape') { this._closePopup(); return; }
+    if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key) && !event.composedPath().some(n => n.classList && n.classList.contains('eh-mbody'))) { event.preventDefault(); return; }
     if (event.key !== 'Tab') return;
     const nodes = [...this.shadowRoot.querySelectorAll('.eh-modal button')];
     if (!nodes.length) return;
     const first = nodes[0], last = nodes[nodes.length - 1], active = this.shadowRoot.activeElement;
-    if (event.shiftKey && (active === first || !active)) { event.preventDefault(); last.focus(); }
-    else if (!event.shiftKey && (active === last || !active)) { event.preventDefault(); first.focus(); }
+    if (event.shiftKey && (active === first || !active)) { event.preventDefault(); last.focus({ preventScroll: true }); }
+    else if (!event.shiftKey && (active === last || !active)) { event.preventDefault(); first.focus({ preventScroll: true }); }
   }
   _click(event) {
     const t = event.target;
@@ -312,9 +338,9 @@ class EntityHealthCard extends HTMLElement {
     if (t.dataset && t.dataset.backdrop === '1') { this._closePopup(); return; }
     if (t.closest('[data-close]')) { this._closePopup(); return; }
     const chip = t.closest('[data-f]');
-    if (chip) { this._filter = chip.dataset.f; this._pendingFocus = `chip:${chip.dataset.f}`; this._last = ''; this._paint(); return; }
+    if (chip) { this._filter = chip.dataset.f; this._target = ''; this._pendingFocus = `chip:${chip.dataset.f}`; this._last = ''; this._paint(); return; }
     const open = t.closest('[data-open]');
-    if (open) this._openPopup(open.dataset.focus);
+    if (open) this._openPopup(open.dataset.focus, open.dataset.id);
   }
 }
 const EH_EDITOR_CSS = `

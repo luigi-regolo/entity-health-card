@@ -126,5 +126,12 @@ test('read-only and private: no commands, no network, no URLs', () => {
 
 test('entity id is not repeated when the name equals the id', () => {
   const html = m.ehRowHTML({ id: 'sensor.x', status: 'missing', name: 'sensor.x', since: null }, m.ehConfig());
-  assert.equal(html.split('sensor.x').length - 1, 1);
+  assert.doesNotMatch(html, /eh-eid/);
+});
+
+test('rows expose the escaped entity id used to position the popup', () => {
+  const html = m.ehRowHTML({ id: 'sensor.x', status: 'unavailable', name: 'N', since: null }, m.ehConfig(), true, 0);
+  assert.match(html, /data-id="sensor\.x"/);
+  const evil = m.ehRowHTML({ id: 'a"><img', status: 'unavailable', name: 'N', since: null }, m.ehConfig(), true, 0);
+  assert.doesNotMatch(evil, /<img/);
 });
