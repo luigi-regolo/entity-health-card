@@ -1,0 +1,13 @@
+{
+  "name": "entity-health-card",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/entity-health-card.js && node --check dist/entity-health-card.js",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
