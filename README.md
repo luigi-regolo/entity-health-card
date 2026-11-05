@@ -1,8 +1,8 @@
 # Entity Health Card
 
-[![TikTok | Segui](assets/tiktok-segui.svg)](https://www.tiktok.com/@luigi.regolo)
+[![HACS Default](https://img.shields.io/badge/HACS-Default-41BDF5?style=flat-square)](https://my.home-assistant.io/redirect/hacs_repository/?owner=luigi-regolo&repository=entity-health-card&category=plugin)
+[![Release](https://img.shields.io/github/v/release/luigi-regolo/entity-health-card?label=Release&style=flat-square)](https://github.com/luigi-regolo/entity-health-card/releases/latest)
 [![License: GPL-3.0-only](https://img.shields.io/badge/license-GPL--3.0--only-blue?style=flat-square)](LICENSE)
-[![HACS](https://img.shields.io/badge/HACS-Repository-41BDF5?style=flat-square)](https://my.home-assistant.io/redirect/hacs_repository/?owner=luigi-regolo&repository=entity-health-card&category=plugin)
 [![GitHub Stars](https://img.shields.io/github/stars/luigi-regolo/entity-health-card?style=flat-square)](https://github.com/luigi-regolo/entity-health-card/stargazers)
 
 ## Overview
@@ -37,9 +37,22 @@ The card only uses the entity states already available in Home Assistant. It doe
 
 ## Installation
 
-### HACS — Custom repository
+### HACS (Recommended)
+
+Install Entity Health Card directly from the default HACS catalog.
 
 [![Open Entity Health Card in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=luigi-regolo&repository=entity-health-card&category=plugin)
+
+1. Open **HACS** in Home Assistant.
+2. Search for **Entity Health Card**.
+3. Select **Entity Health Card** from the results.
+4. Click **Download** to install the card.
+5. Reload your dashboard if necessary.
+6. Add **Entity Health Card** to your dashboard and configure it using the visual editor.
+
+### Alternative: Custom repository
+
+If you prefer to add the repository manually:
 
 1. Open **HACS** in Home Assistant.
 2. Open the menu and select **Custom repositories**.
@@ -119,6 +132,10 @@ No specific minimum Home Assistant version has been independently verified or de
 ## Privacy and Security
 
 The card is read-only: it never calls services or sends commands. It uses only the entity states and permissions already available in Home Assistant, and it contains no telemetry, analytics, remote scripts or external assets.
+
+## Releases
+
+See [GitHub Releases](https://github.com/luigi-regolo/entity-health-card/releases) for published versions.
 
 ## Copyright & License
 
